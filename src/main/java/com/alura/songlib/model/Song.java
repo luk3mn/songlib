@@ -11,6 +11,7 @@ public class Song {
 
     @Column(nullable = false)
     private String title;
+    private String album;
 
     @ManyToOne()
     private Artist artist;
@@ -18,9 +19,10 @@ public class Song {
     public Song() {
     }
 
-    public Song(Long id, String title, Artist artist) {
+    public Song(Long id, String title, String album, Artist artist) {
         this.id = id;
         this.title = title;
+        this.album = album;
         this.artist = artist;
     }
 
@@ -40,11 +42,26 @@ public class Song {
         this.title = title;
     }
 
+    public String getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(String album) {
+        this.album = album;
+    }
+
     public Artist getArtist() {
         return artist;
     }
 
     public void setArtist(Artist artist) {
         this.artist = artist;
+    }
+
+    @Override
+    public String toString() {
+        return "Song: " + title +
+                ", artist: " + artist.getName() +
+                ", album: " + album;
     }
 }

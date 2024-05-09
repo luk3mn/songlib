@@ -1,16 +1,27 @@
 package com.alura.songlib.main;
 
+import com.alura.songlib.model.Artist;
+import com.alura.songlib.model.Song;
 import com.alura.songlib.repository.ArtistRepository;
+import com.alura.songlib.repository.SongRepository;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 
 public class MainApp {
 
     private ArtistRepository artistRepository;
-    private final Scanner scanner = new Scanner(System.in);
+    private SongRepository songRepository;
 
-    public MainApp(ArtistRepository artistRepository) {
+    private final Scanner scanner = new Scanner(System.in);
+    private List<Artist> artists = new ArrayList<>();
+    private List<Song> songs = new ArrayList<>();
+
+    public MainApp(ArtistRepository artistRepository, SongRepository songRepository) {
         this.artistRepository = artistRepository;
+        this.songRepository = songRepository;
     }
 
     public void showMenu() {
@@ -43,10 +54,10 @@ public class MainApp {
                     System.out.println("2");
                     break;
                 case 3:
-                    System.out.println("3");
+                    listSongs();
                     break;
                 case 4:
-                    System.out.println("4");
+                    searchSongByArtist();
                     break;
                 case 5:
                     System.out.println("5");
@@ -72,5 +83,20 @@ public class MainApp {
                 break;
             }
         }
+    }
+
+    private void listSongs() {
+        songs = songRepository.findAll();
+        songs.stream()
+                .sorted(Comparator.comparing(Song::getTitle))
+                .forEach(System.out::println);
+    }
+
+    private void searchSongByArtist() {
+        System.out.println("PLace the artist name: ");
+        var artistName = scanner.next();
+
+        songs = songRepository.findSongByArtist(artistName);
+        songs.forEach(System.out::println);
     }
 }
