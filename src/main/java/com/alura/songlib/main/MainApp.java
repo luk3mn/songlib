@@ -2,6 +2,7 @@ package com.alura.songlib.main;
 
 import com.alura.songlib.model.Artist;
 import com.alura.songlib.model.Song;
+import com.alura.songlib.model.TypeArtist;
 import com.alura.songlib.repository.ArtistRepository;
 import com.alura.songlib.repository.SongRepository;
 
@@ -12,11 +13,10 @@ import java.util.Scanner;
 
 public class MainApp {
 
-    private ArtistRepository artistRepository;
-    private SongRepository songRepository;
+    private final ArtistRepository artistRepository;
+    private final SongRepository songRepository;
 
     private final Scanner scanner = new Scanner(System.in);
-    private List<Artist> artists = new ArrayList<>();
     private List<Song> songs = new ArrayList<>();
 
     public MainApp(ArtistRepository artistRepository, SongRepository songRepository) {
@@ -27,6 +27,7 @@ public class MainApp {
     public void showMenu() {
         while(true) {
             System.out.println("""
+                    
                     [1] Register artist
                     [2] Register song
                     [3] List songs
@@ -76,6 +77,12 @@ public class MainApp {
             System.out.println("PLace the artist type (solo, due, band): ");
             var artistType = scanner.nextLine();
 
+            TypeArtist type = TypeArtist.fromInput(artistType);
+
+            var artists = new Artist(type, artistName);
+            artistRepository.save(artists);
+
+
             System.out.println("Keep registering artists? (S/N): ");
             var newRegister = scanner.nextLine();
 
@@ -119,6 +126,12 @@ public class MainApp {
 
     private void listSongs() {
         songs = songRepository.findAll();
+        System.out.println("""
+                        
+                        ************************
+                        *** Songs registered ***
+                        ************************
+                        """);
         songs.stream()
                 .sorted(Comparator.comparing(Song::getTitle))
                 .forEach(System.out::println);
@@ -126,9 +139,15 @@ public class MainApp {
 
     private void searchSongByArtist() {
         System.out.println("PLace the artist name: ");
-        var artistName = scanner.next();
+        var artistName = scanner.nextLine();
 
         songs = songRepository.findSongByArtist(artistName);
+        System.out.println("""
+                        
+                        ***********************
+                        *** Songs by Artist ***
+                        ***********************
+                        """);
         songs.forEach(System.out::println);
     }
 }

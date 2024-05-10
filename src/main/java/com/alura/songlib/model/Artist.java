@@ -24,11 +24,9 @@ public class Artist {
     public Artist() {
     }
 
-    public Artist(List<Song> song, TypeArtist type, String name, Long id) {
-        this.song = song;
+    public Artist(TypeArtist type, String name) {
         this.type = type;
         this.name = name;
-        this.id = id;
     }
 
     public Long getId() {
