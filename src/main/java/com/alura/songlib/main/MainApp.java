@@ -35,9 +35,9 @@ public class MainApp {
                     
                     [9] Exit
                     """);
-            var option = scanner.nextInt();
+            var option = scanner.nextLine();
 
-            if (option == 9) {
+            if (option.equals("9")) {
                 System.out.println("""
                         ****************************
                         *** The app has finished ***
@@ -47,19 +47,19 @@ public class MainApp {
             }
 
             switch (option) {
-                case 1:
+                case "1":
                     registerArtist();
                     break;
-                case 2:
-                    System.out.println("2");
+                case "2":
+                    registerSong();
                     break;
-                case 3:
+                case "3":
                     listSongs();
                     break;
-                case 4:
+                case "4":
                     searchSongByArtist();
                     break;
-                case 5:
+                case "5":
                     System.out.println("5");
                     break;
                 default:
@@ -71,13 +71,45 @@ public class MainApp {
     private void registerArtist() {
         while (true) {
             System.out.println("Place the artist name: ");
-            var artistName = scanner.next();
+            var artistName = scanner.nextLine();
 
             System.out.println("PLace the artist type (solo, due, band): ");
-            var artistType = scanner.next();
+            var artistType = scanner.nextLine();
 
             System.out.println("Keep registering artists? (S/N): ");
-            var newRegister = scanner.next();
+            var newRegister = scanner.nextLine();
+
+            if (newRegister.equals("N") | newRegister.equals("n")) {
+                break;
+            }
+        }
+    }
+
+    private void registerSong() {
+        while (true) {
+            var newSong = new Song();
+
+            System.out.println("Place the title: ");
+            var title = scanner.nextLine();
+            newSong.setTitle(title);
+
+            System.out.println("PLace the album: ");
+            var album = scanner.nextLine();
+            newSong.setAlbum(album);
+
+            System.out.println("Place the artist: ");
+            var artistName = scanner.nextLine();
+
+            var artist = artistRepository.findByNameContainingIgnoreCase(artistName);
+            if (artist.isPresent()) {
+                newSong.setArtist(artist.get());
+                songRepository.save(newSong);
+            } else {
+                System.out.println("There's not a artist with there artist!!");
+            }
+
+            System.out.println("Keep registering songs? (S/N): ");
+            var newRegister = scanner.nextLine();
 
             if (newRegister.equals("N") | newRegister.equals("n")) {
                 break;
