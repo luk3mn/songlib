@@ -1,5 +1,6 @@
 package com.alura.songlib.main;
 
+import com.alura.songlib.GptService;
 import com.alura.songlib.model.Artist;
 import com.alura.songlib.model.Song;
 import com.alura.songlib.model.TypeArtist;
@@ -61,7 +62,7 @@ public class MainApp {
                     searchSongByArtist();
                     break;
                 case "5":
-                    System.out.println("5");
+                    searchGpt();
                     break;
                 default:
                     System.out.println("Invalid Option");
@@ -86,7 +87,7 @@ public class MainApp {
             System.out.println("Keep registering artists? (S/N): ");
             var newRegister = scanner.nextLine();
 
-            if (newRegister.equals("N") | newRegister.equals("n")) {
+            if (newRegister.equalsIgnoreCase("N")) {
                 break;
             }
         }
@@ -118,7 +119,7 @@ public class MainApp {
             System.out.println("Keep registering songs? (S/N): ");
             var newRegister = scanner.nextLine();
 
-            if (newRegister.equals("N") | newRegister.equals("n")) {
+            if (newRegister.equalsIgnoreCase("N")) {
                 break;
             }
         }
@@ -149,5 +150,12 @@ public class MainApp {
                         ***********************
                         """);
         songs.forEach(System.out::println);
+    }
+
+    private void searchGpt() {
+        System.out.println("PLace information about the artist: ");
+        var artistName = scanner.nextLine();
+        var response = GptService.getInfo(artistName);
+        System.out.println(response.trim());
     }
 }
